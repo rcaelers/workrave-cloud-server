@@ -1,0 +1,65 @@
+{% load url from future %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}base/img/favicon.ico"/> 
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}base/css/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}base/css/base.css" />
+ 
+<title>{% block head_title %}{% endblock %}</title>
+{% block extra_head %}
+{% endblock %}
+</head>
+<body>
+
+<div id="wrap">
+  <div id="header" class="clearfix">
+    <h1><a href="/">Workrave</a></h1>
+    <!--
+    <div id="navbar">
+      <ul>
+      <li><a class="selected">About</a></li>
+      <li><a href="/blog/news/">Blog</a></li>
+      <li><a href="/support/">Support</a></li>
+      <li><a href="/download/">Download</a></li>
+      <li><a href="/code/">Code</a></li>
+      </ul>
+    </div>
+    -->
+  </div>
+  <div id="subheaderwrap" class="clearfix">
+  <div id="subheader" class="clearfix">
+    <div id="subnavbar" class="clearfix">
+    <!--
+      <ul>
+      <li><a class="selected">Introduction</a></li>
+      <li><a href="/screenshots/">Screenshots</a></li>
+      </ul>
+    </div>
+    -->
+  </div>
+</div>
+<div id="body">
+  
+{% block body %}
+<ul>
+{% if user.is_authenticated %}
+<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+<li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+{% else %}
+<li><a href="{% url 'account_login' %}">Sign In</a></li>
+<li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+{% endif %}
+</ul>
+{% block content %}
+{% endblock %}
+{% endblock %}
+{% block extra_body %}
+{% endblock %}
+
+</div>
+<div id="footer">
+</div>
+
+</body>
+</html>

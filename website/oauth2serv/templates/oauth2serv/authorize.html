@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if not error %}
+        <p>{{ client.name }} requests the following permissions:</p>
+        <ul>
+            {% for scope in scopes %}
+                <li>{{ scope.title }}</li>
+            {% endfor %}
+        </ul>
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form.errors }}
+            {{ form.non_field_errors }}
+            <fieldset>
+                <div style="display: none;">
+                    <select type="select" name="scopes" multiple="multiple">
+                    {% for scope in scopes %}
+                        <option value="{{ scope.name }}" selected="selected">{{ scope.description }}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+		User defined: <input type="text" name="tagline"><br>
+		<div style="text-align: right; margin-top: 20px; ">
+                <input type="submit" value="Cancel" /> &nbsp;
+                <input type="submit" value="Authorize" name="authorize" />
+		</div>
+            </fieldset>
+        </form>
+    {% else %}
+        {{ error }}
+        {{ error_description }}
+    {% endif %}
+{% endblock %}

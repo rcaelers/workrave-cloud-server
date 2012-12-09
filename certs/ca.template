@@ -1,0 +1,9 @@
+organization = "Workrave"
+unit = "Certificate Authority"
+cn = "Workrave"
+serial = 001
+expiration_days = 3560
+
+ca
+cert_signing_key
+crl_signing_key

@@ -1,0 +1,52 @@
+[
+    {
+        "pk": 2, 
+        "model": "oauth2serv.scope", 
+        "fields": {
+            "description": "", 
+            "name": "https://api.workrave.org/workrave.config", 
+            "parent": null, 
+            "title": "Access to all settings"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "oauth2serv.scope", 
+        "fields": {
+            "description": "", 
+            "name": "https://api.workrave.org/workrave.control", 
+            "parent": null, 
+            "title": "Allow remote control"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "oauth2serv.scope", 
+        "fields": {
+            "description": "", 
+            "name": "https://api.workrave.org/workrave.state", 
+            "parent": null, 
+            "title": "Access to timer and break state"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "oauth2serv.client", 
+        "fields": {
+            "website": "", 
+            "profile": 1, 
+            "create_date": "2012-12-09T16:42:21.418Z", 
+            "name": "workrave", 
+            "scopes": [
+                2, 
+                3, 
+                1
+            ], 
+            "redirect_uri": "http://localhost/", 
+            "user": 1, 
+            "client_id": "4a1cb098b443b198c8ef91bb81ab7640", 
+            "client_secret": "e470f6a4d5292794689ab42d66a6a8f8", 
+            "description": ""
+        }
+    }
+]

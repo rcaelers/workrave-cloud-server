@@ -1,0 +1,11 @@
+django>=1.4
+south
+uWSGI
+-e ext/django-allauth
+oauth2
+python-openid
+django-bootstrap-form
+django-crispy-forms
+django-avatar
+pil
+psycopg2

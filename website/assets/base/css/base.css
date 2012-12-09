@@ -1,0 +1,236 @@
+html,body {
+height: 100%;
+}
+
+html {
+background-color: #729fcf;
+xbackground-image: url(../img/bg.png);
+background-repeat: repeat-x;
+bacground-attachment: fixed;
+}
+
+.clear {
+clear: both;
+display: block;
+overflow: hidden;
+visibility: hidden;
+width: 0;
+height: 0;
+}
+
+.clearfix:after {
+clear: both;
+content: ' ';
+display: block;
+font-size: 0;
+line-height: 0;
+visibility: hidden;
+width: 0;
+height: 0;
+}
+
+.clearfix {
+display: inline-block;
+}
+
+* html .clearfix {
+height: 1%;
+}
+
+.clearfix {
+display: block;
+}
+
+
+#wrap {
+width: 900px;
+margin: auto;
+height: 100%;
+background: #fff;
+}
+
+#body {
+xmin-height: 100%;
+background: #fff;
+border-bottom: solid #fff 118px;
+}
+
+#header {
+height: 70px;
+position: relative;
+padding: 8px 0 4px 0;
+background: #729fcf;
+}
+
+#header h1 {
+width: 391px;
+height: 70px;
+text-indent: -9000px;
+overflow: hidden;
+display: block;
+float:left;
+background: url(../img/logo.png);
+}
+
+/* Navbar */
+#navbar {
+}
+
+#navbar ul {
+position: absolute;
+right: 1em;
+bottom: 0px;
+}
+
+#navbar ul li {
+float: left; /* For IE8, for FF float on a is sufficient */
+margin-left: 4px;
+}
+
+#navbar ul li a {
+padding: .3em .5em;
+color: #fff;
+font-size: 11pt;
+background: #4e9a06;
+display: -moz-inline-stack;
+display: inline-block;
+border-radius-topleft: .5em;
+border-radius-topright: .5em;
+-moz-border-radius-topleft: .5em;
+-moz-border-radius-topright: .5em;
+-webkit-border-top-left-radius: .5em;
+-webkit-border-top-right-radius: .5em;
+text-decoration: none;
+font-weight: bold;
+float: left;
+}
+
+#navbar ul li a:hover{
+background: #7c0;
+color: #fff;
+}
+
+#navbar ul li a.selected {
+background: #8ae234;
+} 
+
+#subheaderwrap {
+background: #729fcf;
+}
+
+#subheader {
+background: #8ae234;
+-moz-border-radius-topleft: .5em;
+-moz-border-radius-topright: .5em;
+-webkit-border-top-left-radius: .5em;
+-webkit-border-top-right-radius: .5em;
+min-height: .5em;
+padding: .2em 1em;
+}
+
+#subnavbar ul {
+float: right;
+}
+
+#subnavbar ul li {
+float: left; /* For IE8, for FF float on a is sufficient */
+margin-left: 4px;
+}
+
+#subnavbar ul li a{
+padding: .1em .5em;
+color: #fff;
+font-size: 11pt;
+background: #8ae234;
+display: -moz-inline-stack;
+display: inline-block;
+text-decoration: none;
+font-weight: bold;
+float: left;
+border-radius: .5em;
+-moz-border-radius: .5em;
+-webkit-border-radius: .5em;
+}
+
+#subnavbar ul li a:hover{
+background: #4e9a06;
+color: #fff;
+}
+
+#subnavbar ul li a.selected {
+background: #4e9a06;
+} 
+
+#body {
+text-align: left;
+padding: 1em 2em;
+}
+
+#body a:link, #body a:visited, #body a:active {
+text-decoration: none;
+color: #36a;
+}
+#body a:hover {
+text-decoration: underline;
+}
+
+#body th {
+font-weight: bold;
+}
+
+#body h1 {
+font-weight: bold;
+font-size: 16pt;
+margin: .5em 0;
+}
+
+#body h2 {
+font-weight: bold;
+font-size: 13pt;
+margin: .5em 0;
+}
+
+#body h3 {
+font-weight: bold;
+font-size: 13pt;
+margin: .5em 0;
+}
+
+#body h4 {
+font-weight: bold;
+font-size: 12pt;
+margin: .5em 0;
+}
+
+#body p {
+margin: 1em 0;
+}
+
+#body dt {
+font-weight: bold;
+}
+
+#body dd, #body ul, #body ol {
+margin-left: 1.5em;
+}
+
+#body li {
+list-style-type: disc;
+}
+
+#body {
+font-size: 11pt;
+}
+
+#body .small {
+font-size: 8pt;
+}
+
+#footer {
+position:fixed;
+bottom: 0px;
+left: 0px;
+width: 100%;
+height: 118px;
+background: url(../img/grass.png);
+}

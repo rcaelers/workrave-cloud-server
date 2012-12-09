@@ -1,0 +1,10 @@
+organization = "Workrave"
+cn = "avon.home.krandor.org"
+dns_name = "avon.home.krandor.org"
+serial = 002
+expiration_days = 3560
+
+tls_www_server
+tls_www_client
+encryption_key
+signing_key
