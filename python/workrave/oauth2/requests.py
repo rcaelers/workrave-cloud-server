@@ -1,9 +1,10 @@
 import logging
+import json
 from urlparse import urlsplit
 from datetime import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, QueryDict
-from django.utils import simplejson
+
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,6 +12,9 @@ from .models import Client, Scope, CodeGrant, Token
 from .forms import AuthorizationForm
 from .exceptions import OAuthError
 from .settings import SESSION_AUTH_REQUEST_KEY
+from .settings import ACCESS_TOKEN_LENGTH, REFRESH_TOKEN_LENGTH
+
+from utils import TokenGenerator, TimestampGenerator
 
 log = logging.getLogger(__name__)
 
@@ -96,13 +100,16 @@ class AuthorizationRequest(object) :
         self.scopes = [ scope for scope in self.scopes if (scope.name in limited_scopes and scope in allowed_scopes)] 
 
     def create_autorization_grant_code(self) :
+        print 'new grant'
         code_grant = CodeGrant(user=self.user, 
                                client=self.client, 
                                description=self.info,
                                tagline=self.tagline,
                                redirect_uri=self.redirect_uri)
 
+        print 'save grant', code_grant.code
         code_grant.save()
+        print 'saved grant'
 
         for scope in self.scopes:
             code_grant.scopes.add(scope)
@@ -172,7 +179,7 @@ class TokenRequest(object) :
     def create(cls, request, *args, **kwargs) : 
         grant_type = request.POST.get('grant_type')
 
-        if self.grant_type is None:
+        if grant_type is None:
             raise OAuthError('invalid_request', 'Missing required parameter: grant_type')
         
         if grant_type  == 'authorization_code': 
@@ -230,16 +237,17 @@ class AuthorizationCodeRequest(TokenRequest) :
 
         now = datetime.utcnow().replace(tzinfo=utc)
         
-        return HttpResponse(simplejson.dumps({'access_token': token.access_token,
-                                              'expires_in': (token.expires - now).seconds,
-                                              'refresh_token': token.refresh_token,
-                                              'scope': ' '.join([scope.name for scope in token.scopes.all()]),
-                                              }), content_type='application/json;charset=UTF-8')        
+        return HttpResponse(json.dumps({'access_token': token.access_token,
+                                        'expires_in': (token.expires - now).seconds,
+                                        'refresh_token': token.refresh_token,
+                                        'scope': ' '.join([scope.name for scope in token.scopes.all()]),
+                                        }), content_type='application/json;charset=UTF-8')        
         
         
 class RefreshTokenRequest(TokenRequest) :
     def __init__(self, request):
         super(RefreshTokenRequest, self).__init__(request)
+        self.validate()
 
     def validate(self):
         self.refresh_token = self.request.POST.get('refresh_token')
@@ -248,23 +256,23 @@ class RefreshTokenRequest(TokenRequest) :
             raise OAuthError('invalid_request', 'Missing required parameter: refresh_token')
             
         try:
-            self.token = Token.objects.get(refresh_token=self.refresh_token, expires__gt=datetime.now())
-        except CodeGrant.DoesNotExist:
+            self.token = Token.objects.get(refresh_token=self.refresh_token)
+        except Token.DoesNotExist:
             raise OAuthError('invalid_grant', _('Invalid grant'))
 
-        if self.client != self.code_grant.client:
+        if self.client != self.token.client:
             raise OAuthError('invalid_request', 'client mismatch')
 
     def execute(self):
         now = datetime.utcnow().replace(tzinfo=utc)
 
         self.token.created_date = now
-        self.token.access_token = generate_key(ACCESS_TOKEN_LENGTH)
-        self.token.refresh_token = generate_key(REFRESH_TOKEN_LENGTH)
-        self.token.token.save()
+        self.token.access_token = TokenGenerator(ACCESS_TOKEN_LENGTH)()
+        self.token.refresh_token = TokenGenerator(REFRESH_TOKEN_LENGTH)()
+        self.token.save()
 
-        return HttpResponse(simplejson.dumps({'access_token': token.access_token,
-                                              'expires_in': (token.expires - now).seconds,
-                                              'refresh_token': token.refresh_token,
-                                              'scope': ' '.join([scope.name for scope in token.scopes.all()]),
-                                              }), content_type='application/json;charset=UTF-8')        
+        return HttpResponse(json.dumps({'access_token': self.token.access_token,
+                                        'expires_in': (self.token.expires - now).seconds,
+                                        'refresh_token': self.token.refresh_token,
+                                        'scope': ' '.join([scope.name for scope in self.token.scopes.all()]),
+                                        }), content_type='application/json;charset=UTF-8')        

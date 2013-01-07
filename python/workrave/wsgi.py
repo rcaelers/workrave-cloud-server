@@ -13,9 +13,24 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
+from workrave.cloud.utils import make_django_green
+make_django_green()
+
+#from gevent.pywsgi import WSGIServer
+import gevent
+
 import os
+import traceback
+#from django.core.handlers.wsgi import WSGIHandler
+from django.core.signals import got_request_exception
+from django.core.management import call_command
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "workrave.settings")
+
+def exception_printer(sender, **kwargs):
+    traceback.print_exc()
+
+got_request_exception.connect(exception_printer)
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION

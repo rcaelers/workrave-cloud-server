@@ -7,7 +7,7 @@ from .settings import CODE_LENGTH, CODE_LIFETIME
 from .settings import ACCESS_TOKEN_LENGTH, ACCESS_TOKEN_LIFETIME
 from .settings import REFRESH_TOKEN_LENGTH
 
-from utils import generate_key, generate_timestamp
+from utils import TokenGenerator, TimestampGenerator
 
 TAGLINE_LENGTH = 250
 
@@ -87,12 +87,12 @@ class Client(models.Model):
 
     client_id = models.CharField(
         max_length=CLIENT_ID_LENGTH,
-        default=generate_key(CLIENT_ID_LENGTH)
+        default=TokenGenerator(CLIENT_ID_LENGTH)
     )
 
     client_secret = models.CharField(
         max_length=CLIENT_SECRET_LENGTH,
-        default=generate_key(CLIENT_SECRET_LENGTH)
+        default=TokenGenerator(CLIENT_SECRET_LENGTH)
     )
 
     redirect_uri = models.URLField()
@@ -122,7 +122,7 @@ class CodeGrant(models.Model):
 
     code = models.CharField(
         max_length=CODE_LENGTH,
-        default=generate_key(CODE_LENGTH),
+        default=TokenGenerator(CODE_LENGTH),
         unique=True,
         db_index=True
     )
@@ -149,7 +149,7 @@ class CodeGrant(models.Model):
     )
 
     expires = models.DateTimeField(
-        default=generate_timestamp(CODE_LIFETIME)
+        default=TimestampGenerator(CODE_LIFETIME)
     )
 
     class Meta:
@@ -171,21 +171,21 @@ class Token(models.Model):
 
     code = models.CharField(
         max_length=CODE_LENGTH,
-        default=generate_key(CODE_LENGTH),
+        default=TokenGenerator(CODE_LENGTH),
         unique=True,
         db_index=True
     )
 
     access_token = models.CharField(
         max_length=ACCESS_TOKEN_LENGTH,
-        default=generate_key(ACCESS_TOKEN_LENGTH),
+        default=TokenGenerator(ACCESS_TOKEN_LENGTH),
         unique=True,
         db_index=True
     )
 
     refresh_token = models.CharField(
         max_length=REFRESH_TOKEN_LENGTH,
-        default=generate_key(REFRESH_TOKEN_LENGTH),
+        default=TokenGenerator(REFRESH_TOKEN_LENGTH),
         unique=True,
         db_index=True,
         null=True,
@@ -212,7 +212,7 @@ class Token(models.Model):
     )
 
     expires = models.DateTimeField(
-        default=generate_timestamp(ACCESS_TOKEN_LIFETIME)
+        default=TimestampGenerator(ACCESS_TOKEN_LIFETIME)
     )
 
     class Meta:

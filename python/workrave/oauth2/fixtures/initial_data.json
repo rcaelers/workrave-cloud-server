@@ -1,7 +1,7 @@
 [
     {
         "pk": 2, 
-        "model": "oauth2serv.scope", 
+        "model": "oauth2.scope", 
         "fields": {
             "description": "", 
             "name": "https://api.workrave.org/workrave.config", 
@@ -11,7 +11,7 @@
     }, 
     {
         "pk": 3, 
-        "model": "oauth2serv.scope", 
+        "model": "oauth2.scope", 
         "fields": {
             "description": "", 
             "name": "https://api.workrave.org/workrave.control", 
@@ -21,7 +21,7 @@
     }, 
     {
         "pk": 1, 
-        "model": "oauth2serv.scope", 
+        "model": "oauth2.scope", 
         "fields": {
             "description": "", 
             "name": "https://api.workrave.org/workrave.state", 
@@ -31,7 +31,7 @@
     }, 
     {
         "pk": 1, 
-        "model": "oauth2serv.client", 
+        "model": "oauth2.client", 
         "fields": {
             "website": "", 
             "profile": 1, 

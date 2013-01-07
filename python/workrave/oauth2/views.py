@@ -1,4 +1,5 @@
 import logging
+import json
 from urlparse import urlsplit
 from datetime import datetime
 
@@ -8,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils import simplejson
 from django.utils.translation import ugettext_lazy as _
 
 from .exceptions import OAuthError
@@ -18,10 +18,11 @@ from .requests import AuthorizationRequest, AuthorizationCodeRequest, RefreshTok
 log = logging.getLogger(__name__)
 
 class AuthorizationView(TemplateView):
-    template_name = 'oauth2serv/authorize.html'
-    
+    template_name = 'oauth2/authorize.html' 
+   
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        log.debug('Dispatch')
         response = super(AuthorizationView, self).dispatch(request, *args, **kwargs)
         response['Cache-Control'] = 'no-store'
         response['Pragma'] = 'no-cache'
@@ -49,11 +50,12 @@ class AuthorizationView(TemplateView):
                 return HttpResponseRedirect(uri)
         
     def get(self, request) : 
+        log.debug('AuthorizationView 1')
         try :
             auth_request = None
             if not request.is_secure() and not settings.DEBUG:
                 raise OAuthError('invalid_request', _('A secure connection is required.'))
- 
+
             request.session[SESSION_AUTH_REQUEST_KEY] = request.GET
         
             auth_request = AuthorizationRequest(request, request.GET)
@@ -96,7 +98,7 @@ class TokenView(View):
             'error_description': u'%s' % detail
         }
 
-        return HttpResponse(simplejson.dumps(context), content_type='application/json;charset=UTF-8')        
+        return HttpResponse(json.dumps(context), content_type='application/json;charset=UTF-8')        
 
     def post(self, request):
         try :
