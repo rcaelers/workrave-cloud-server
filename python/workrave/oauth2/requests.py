@@ -204,7 +204,7 @@ class AuthorizationCodeRequest(TokenRequest) :
             raise OAuthError('invalid_request', _('Missing required parameter: code'))
             
         try:
-            self.code_grant = CodeGrant.objects.get(code=self.code, client=self.client, expires__gt=datetime.now())
+            self.code_grant = CodeGrant.objects.get(code=self.code, client=self.client, expires__gt=datetime.utcnow())
         except CodeGrant.DoesNotExist:
             raise OAuthError('invalid_grant', _('Invalid grant'))
 
@@ -235,7 +235,7 @@ class AuthorizationCodeRequest(TokenRequest) :
 
         self.code_grant.delete()
 
-        now = datetime.utcnow().replace(tzinfo=utc)
+        now = datetime.utcnow()
         
         return HttpResponse(json.dumps({'access_token': token.access_token,
                                         'expires_in': (token.expires - now).seconds,
@@ -266,7 +266,7 @@ class RefreshTokenRequest(TokenRequest) :
     def execute(self):
         now = datetime.utcnow().replace(tzinfo=utc)
 
-        self.token.created_date = now
+        self.token.created_date = now.replace(tzinfo=utc)
         self.token.access_token = TokenGenerator(ACCESS_TOKEN_LENGTH)()
         self.token.refresh_token = TokenGenerator(REFRESH_TOKEN_LENGTH)()
         self.token.save()

@@ -11,6 +11,7 @@ def require_oauth_scope(scope_list):
             auth=BearerAuth(request, scope_list)
             try:
                 auth.validate()
+                auth.login()
             except OAuthError, e: 
                 return auth.response(e)
 

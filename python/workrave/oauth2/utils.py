@@ -1,9 +1,10 @@
-import time
+from datetime import datetime
 from datetime import timedelta
 from hashlib import sha512
 from uuid import uuid4
 
 from django.utils import timezone
+from django.utils.timezone import utc
 
 class TokenGenerator(object):
     def __init__(self, length):
@@ -17,4 +18,4 @@ class TimestampGenerator(object):
         self.delta = delta
 
     def __call__(self):
-        return timezone.now() + timedelta(seconds=self.delta)
+        return datetime.utcnow() + timedelta(seconds=self.delta)

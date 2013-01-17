@@ -204,3 +204,7 @@ try:
     from allauth_settings import *
 except ImportError:
     pass
+
+REST_FRAMEWORK = {
+    'FILTER_BACKEND': 'rest_framework.filters.DjangoFilterBackend'
+}

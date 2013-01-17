@@ -1,9 +1,11 @@
 from datetime import datetime
+from django.utils.timezone import utc
 import json
 
 from django.contrib.auth import login
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
+from django.utils.timezone import utc
 
 from .models import Token
 from .exceptions import OAuthError
@@ -11,7 +13,8 @@ from .exceptions import OAuthError
 class BearerAuth():
     request = None
     scopes = None
-
+    user = None
+        
     def __init__(self, request, scopes):
         self.request = request
         self.scopes = scopes
@@ -39,22 +42,22 @@ class BearerAuth():
                             )
 
     def validate(self):
-        token = None
-
+        access_token = None
+        
         auth = self.request.META.get('HTTP_AUTHORIZATION')
         if auth is not None:
             method, value = auth.split(' ')
             if method == 'Bearer':
-                token = value
+                access_token = value
 
-        if token is None:
-            token = self.request.REQUEST.get('access_token')
+        if access_token is None:
+            access_token = self.request.REQUEST.get('access_token')
 
-        if token is None:
+        if access_token is None:
             raise OAuthError('invalid_token', 'Request does not contain a valid access token')
 
         try:
-            token = Token.objects.get(access_token=token, expires__gt=datetime.now())
+            token = Token.objects.get(access_token=access_token, expires__gt=datetime.utcnow())
         except ObjectDoesNotExist:
             raise OAuthError('invalid_token', 'Request contains a invalid access token')
 
@@ -62,6 +65,9 @@ class BearerAuth():
             if token.scopes.filter(name__in=self.scopes).count() != len(self.scopes):
                 raise OAuthError('insufficient_scope', '')
 
-        if not hasattr(token.user, 'backend'):
-            token.user.backend = "django.contrib.auth.backends.ModelBackend"
-            login(self.request, token.user)
+        self.user = token.user
+        
+    def login(self):
+        if not hasattr(self.user, 'backend'):
+            self.user.backend = "django.contrib.auth.backends.ModelBackend"
+            login(self.request, self.user)
