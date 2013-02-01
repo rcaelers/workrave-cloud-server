@@ -12,7 +12,7 @@ from .models import Client, Scope, CodeGrant, Token
 from .forms import AuthorizationForm
 from .exceptions import OAuthError
 from .settings import SESSION_AUTH_REQUEST_KEY
-from .settings import ACCESS_TOKEN_LENGTH, REFRESH_TOKEN_LENGTH
+from .settings import ACCESS_TOKEN_LENGTH, REFRESH_TOKEN_LENGTH, ACCESS_TOKEN_LIFETIME
 
 from utils import TokenGenerator, TimestampGenerator
 
@@ -264,11 +264,11 @@ class RefreshTokenRequest(TokenRequest) :
             raise OAuthError('invalid_request', 'client mismatch')
 
     def execute(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-
+        now = datetime.utcnow()
         self.token.created_date = now.replace(tzinfo=utc)
         self.token.access_token = TokenGenerator(ACCESS_TOKEN_LENGTH)()
         self.token.refresh_token = TokenGenerator(REFRESH_TOKEN_LENGTH)()
+        self.token.expires = TimestampGenerator(ACCESS_TOKEN_LIFETIME)()
         self.token.save()
 
         return HttpResponse(json.dumps({'access_token': self.token.access_token,
