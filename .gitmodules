@@ -1,3 +1,0 @@
-[submodule "ext/django-allauth"]
-	path = ext/django-allauth
-	url = https://github.com/pennersr/django-allauth.git
