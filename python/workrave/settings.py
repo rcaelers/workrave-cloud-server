@@ -194,7 +194,7 @@ LOGGING = {
         },
         '': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
     }
@@ -206,5 +206,6 @@ except ImportError:
     pass
 
 REST_FRAMEWORK = {
-    'FILTER_BACKEND': 'rest_framework.filters.DjangoFilterBackend'
+    'FILTER_BACKEND': 'rest_framework.filters.DjangoFilterBackend',
+    'UNAUTHENTICATED_USER': None
 }
