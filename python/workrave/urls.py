@@ -1,12 +1,10 @@
 from django.conf.urls import patterns, include, url
 
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^accounts/', include('allauth.urls')),
-
     url(r'^avatar/', include('avatar.urls')),
 
     url(r'^oauth2/', include('workrave.oauth2.urls', namespace = 'oauth2')),
@@ -22,4 +20,3 @@ urlpatterns += staticfiles_urlpatterns()
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
