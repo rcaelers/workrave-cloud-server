@@ -5,22 +5,20 @@ class Client(models.Model):
     owner = models.ForeignKey('auth.User', related_name='+', blank=True, unique=True)
     last_seen = models.DateTimeField()
     uuid = models.CharField(max_length=32, unique=True)
+
     
 class State(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('auth.User', related_name='state', blank=True, unique=True)
     time = models.DateTimeField()
     timezone = models.IntegerField()
-
-    #active = models.CharField(
-    #    "UID of active client",
-    #    help_text='Scope identifier.',
-    #    max_length=SCOPE_LENGTH,
-    #    unique=True)
+    active = models.CharField(max_length=36)
+    state = models.TextField()
     
     class Meta:
         ordering = ('created',)
-    
+
+        
 class Configuration(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('auth.User', related_name='configuration', blank=True, unique=True)
@@ -47,9 +45,13 @@ class Statistics(models.Model):
     rest_break = models.ForeignKey('BreakStatistics', related_name='+')
     daily_limit = models.ForeignKey('BreakStatistics', related_name='+')
 
+    def __unicode__(self):
+        return '%s' % self.date
+    
     class Meta:
         ordering = ('created',)
-    
+
+        
 class BreakStatistics(models.Model):
     prompted = models.IntegerField(default=0)
     taken = models.IntegerField(default=0)
