@@ -188,7 +188,7 @@ class ActivateView(View):
         uuid = kwargs.get('uuid', None)
         txt = kwargs.get('txt', "x")
         if uuid is not None:
-            RedisView.send('update', 'activate', json.dumps( {'hello': 'world', 'user': 'robc', 'txt': txt}), request.user.username)
+            RedisView.send('workrave', 'activate', json.dumps( {'hello': 'world', 'user': 'robc', 'txt': txt}), request.user.username)
         return HttpResponse()
         
 class ClearView(View):
@@ -204,8 +204,7 @@ class ClearView(View):
         if uuid is not None:
             RedisView.send('update', 'clear', json.dumps( {'hello': 'world', 'user': 'robc', 'txt': txt}), request.user.username, uuid)
         return HttpResponse()
-        
-    
+
 class RegisterView(View):
     def dispatch(self, request, *args, **kwargs):
         response = super(RegisterView, self).dispatch(request, *args, **kwargs)

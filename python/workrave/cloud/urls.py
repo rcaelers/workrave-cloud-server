@@ -26,9 +26,9 @@ urlpatterns = patterns('workrave.cloud.views',
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'api'])
 
 urlpatterns += patterns('',
-    url(r'^stream1/(?P<uuid>[0-9a-zA-Z]+)/$', RedisView.as_view(event_category="update"), name="stream1"),
     url(r'^activate/(?P<uuid>[0-9a-zA-Z]+)/(?P<txt>[0-9a-zA-Z]+)/$', ActivateView.as_view()),
     url(r'^clear/(?P<uuid>[0-9a-zA-Z]+)/(?P<txt>[0-9a-zA-Z]+)/$', ClearView.as_view()),
     url(r'^register/(?P<uuid>[0-9a-zA-Z]+)/$', RegisterView.as_view()),
+    url(r'^stream1/(?P<uuid>[-\w]+)/$', RedisView.as_view(domain="workrave"), name='stream1'),
 )
     
